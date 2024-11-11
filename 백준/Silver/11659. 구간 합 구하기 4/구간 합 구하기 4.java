@@ -1,28 +1,32 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 class Main
   {
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException
       {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        int counter = sc.nextInt();
-        int i = 0;
-        int j = 0;
-        int[] a = new int[N];
-        int sum = 0;
-        int[] sumArray = new int[N];
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int N = Integer.parseInt(st.nextToken());
+        int counter = Integer.parseInt(st.nextToken());
+
+        String[] a = br.readLine().split(" ");
+        long sum = 0;
+        long[] sumArray = new long[N];
         for (int q = 0; q < N; q++)
           {
-            a[q] = sc.nextInt();
-            sum += a[q];
+            sum += Integer.parseInt(a[q]);
             sumArray[q] = sum;
           }
 
         for (int s = 0; s < counter; s++)
           {
-            i = sc.nextInt();
-            j = sc.nextInt();
+            st = new StringTokenizer(br.readLine());
+            int i = Integer.parseInt(st.nextToken());
+            int j = Integer.parseInt(st.nextToken());
             System.out.println(sumArray[j-1] - (i == 1 ? 0 : sumArray[i-2]));
           }
       }
