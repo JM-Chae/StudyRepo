@@ -10,6 +10,7 @@ public class Main
         int n = Integer.parseInt(br.readLine());
         int[] arr = new int[n];
 
+
         for (int i = 0; i < n; i++)
           {
             arr[i] = Integer.parseInt(br.readLine());
@@ -17,19 +18,26 @@ public class Main
 
         for (int i = 0; i < n; i++)
           {
+            boolean done = true;
             for (int j = 0; j < n - i; j++)
               {
                 if (j < n - 1)
                   {
                     int temp = arr[j];
-                    arr[j] = Math.min(arr[j], arr[j + 1]);
-                    if (arr[j] != temp)
+                    if (arr[j] > arr[j + 1])
                       {
+                        arr[j] = arr[j + 1];
                         arr[j + 1] = temp;
+                        done = false;
                       }
                   }
               }
+            if (done)
+              {
+                break;
+              }
           }
+
         for (int i = 0; i < n; i++)
           {
             System.out.println(arr[i]);
