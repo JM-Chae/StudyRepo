@@ -12,25 +12,20 @@ public class Main
 
         for (int i = 0; i < n.length(); i++)
           {
-            int index = 0;
-            char min = c[i];
-            for (int j = i; j < n.length(); j++)
+            if ( i != n.length() -1)
               {
-                if (j != n.length() - 1)
+                for (int j = i + 1; j > 0; j--)
                   {
-                    if (min > c[j + 1])
+                    if (c[j] < c[j - 1])
                       {
-                        min = c[j + 1];
-                        index = j + 1;
+                        char temp = c[j - 1];
+                        c[j - 1] = c[j];
+                        c[j] = temp;
                       }
                   }
               }
-            if (index != 0)
-              {
-                c[index] = c[i];
-                c[i] = min;
-              }
           }
+
 
         StringBuilder sorted = new StringBuilder();
 
