@@ -66,7 +66,7 @@ public class Main
             return i;
           } else
           {
-            return find(a[i]);
+            return a[i] =  find(a[i]);
           }
       }
   }
