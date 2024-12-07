@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
 import java.util.StringTokenizer;
 
 class Main
@@ -15,33 +14,28 @@ class Main
         for (int i = 0; i < t; i++)
           {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            int size = Math.max(a, b);
+            int low = Integer.parseInt(st.nextToken());
+            int high = Integer.parseInt(st.nextToken());
 
-            int[] list = new int[size + 1];
+            int temp = low;
+            low = Math.min(high, low);
+            if (low == high) high = temp;
 
-            for (int j = 0; j <= size; j++)
+            while (true)
               {
-                list[j] = j;
-              }
-
-            HashSet<Integer> temp = new HashSet<>();
-            int ans = 1;
-
-            for (int j = a; j > 1; j = j / 2)
-              {
-                temp.add(list[j]);
-              }
-            for (int j = b; j > 1; j = j / 2)
-              {
-                if (temp.contains(list[j]))
+                if (high == low)
                   {
-                    ans = Math.max(ans, list[j]);
+                    break;
+                  } else if (high < low)
+                  {
+                    low = low / 2;
+                  } else
+                  {
+                    high = high / 2;
                   }
               }
 
-            System.out.println(ans * 10);
+            System.out.println(high * 10);
           }
       }
   }
