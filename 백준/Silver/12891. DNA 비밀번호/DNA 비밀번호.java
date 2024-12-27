@@ -5,89 +5,91 @@ import java.util.StringTokenizer;
 
 class Main
   {
-    static int count = 0;
-    static int ok = 0;
-    static char[] dnaArr;
-    static int[] condition = new int[4];
-    static int[] checkArr = new int[4];
+    static int[] pass = new int[4];
+    static int[] lock = new int[4];
 
     public static void main(String[] args) throws IOException
       {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int dnaL = Integer.parseInt(st.nextToken());
-        int extractL = Integer.parseInt(st.nextToken());
 
-        dnaArr = new char[dnaL];
-        dnaArr = br.readLine().toCharArray();
+        int s = Integer.parseInt(st.nextToken());
+        int p = Integer.parseInt(st.nextToken());
+        int count = 0;
+
+        String DNA = br.readLine();
 
         st = new StringTokenizer(br.readLine());
+        char[] DNAarr = DNA.toCharArray();
+
         for (int i = 0; i < 4; i++)
           {
-            condition[i] = Integer.parseInt(st.nextToken());
-            ok = condition[i] == 0 ? ok+1 : ok;
+            lock[i] = Integer.parseInt(st.nextToken());
           }
 
-        for (int i = 0; i < extractL; i++)
+        for (int i = 0; i < p; i++)
           {
-            doCheck(i);
+            checkNext(DNAarr[i]);
           }
 
-        count = ok == 4 ? count + 1 : count;
+        if (ans()) count++;
 
-        for (int i = extractL; i < dnaL; i++)
+        for (int i = p; i < s; i++)
           {
-            doCheck(i);
-            doMove(i-extractL);
-            count = ok == 4 ? count + 1 : count;
-
+            checkPrev(DNAarr[i - p]);
+            checkNext(DNAarr[i]);
+            if (ans()) count++;
           }
 
         System.out.println(count);
       }
 
-    static void doCheck(int i)
+    static void checkNext(char DNAChar)
       {
-        switch (dnaArr[i])
+        switch (DNAChar)
           {
             case 'A':
-              checkArr[0]++;
-              ok = checkArr[0] == condition[0] ? ok+1 : ok;
+              pass[0] += 1;
               break;
+
             case 'C':
-              checkArr[1]++;
-              ok = checkArr[1] == condition[1] ? ok+1 : ok;
+              pass[1] += 1;
               break;
+
             case 'G':
-              checkArr[2]++;
-              ok = checkArr[2] == condition[2] ? ok+1 : ok;
+              pass[2] += 1;
               break;
+
             case 'T':
-              checkArr[3]++;
-              ok = checkArr[3] == condition[3] ? ok+1 : ok;
+              pass[3] += 1;
               break;
           }
       }
-    static void doMove(int i)
+
+    static void checkPrev(char DNAChar)
       {
-        switch (dnaArr[i])
+        switch (DNAChar)
           {
             case 'A':
-              ok = checkArr[0] == condition[0] ? ok-1 : ok;
-              checkArr[0]--;
+              pass[0] -= 1;
               break;
+
             case 'C':
-              ok = checkArr[1] == condition[1] ? ok-1 : ok;
-              checkArr[1]--;
+              pass[1] -= 1;
               break;
+
             case 'G':
-              ok = checkArr[2] == condition[2] ? ok-1 : ok;
-              checkArr[2]--;
+              pass[2] -= 1;
               break;
+
             case 'T':
-              ok = checkArr[3] == condition[3] ? ok-1 : ok;
-              checkArr[3]--;
+              pass[3] -= 1;
               break;
           }
+      }
+
+    static boolean ans()
+      {
+        return pass[0] >= lock[0] && pass[1] >= lock[1] && pass[2] >= lock[2] && pass[3] >= lock[3];
       }
   }
