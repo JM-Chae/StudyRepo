@@ -9,60 +9,64 @@ class Main
     public static void main(String[] args) throws IOException
       {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        long T = Long.parseLong(br.readLine());
-        long Q = 0L;
-        while (Q < T)
+        int t = Integer.parseInt(br.readLine());
+
+        for (int z = 0; z < t; z++)
           {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            long N = Long.parseLong(st.nextToken());
-            long M = Long.parseLong(st.nextToken());
-            long count = 0L;
-            long[] arrN = new long[(int) N];
-            long[] arrM = new long[(int) M];
-            long index = 0L;
+            int count = 0;
 
-            long pntN = N - 1L;
-            long pntM = 0L;
+            int n = Integer.parseInt(st.nextToken());
+            int m = Integer.parseInt(st.nextToken());
+
+            int[] a = new int[n];
+            int[] b = new int[m];
 
             st = new StringTokenizer(br.readLine());
-            for (long i = 0; i < N; i++)
+
+            for (int i = 0; i < n; i++)
               {
-                arrN[(int) i] = Long.parseLong(st.nextToken());
+                a[i] = Integer.parseInt(st.nextToken());
               }
 
             st = new StringTokenizer(br.readLine());
-            for (long i = 0; i < M; i++)
+
+            for (int i = 0; i < m; i++)
               {
-                arrM[(int) i] = Long.parseLong(st.nextToken());
+                b[i] = Integer.parseInt(st.nextToken());
               }
 
-            Arrays.sort(arrN);
-            Arrays.sort(arrM);
+            Arrays.sort(a);
+            Arrays.sort(b);
 
-            while (index < N)
+            for (int i = 0; i < n; i++)
               {
-                if (pntM < M)
-                  {
-                    if (arrN[(int) pntN] > arrM[(int) pntM])
-                      {
-                        count++;
-                        pntM++;
-                      } else
-                      {
-                        pntN--;
-                        index++;
-                        pntM = 0L;
-                      }
-                  } else
-                  {
-                    pntN--;
-                    index++;
-                    pntM = 0L;
-                  }
+                count += eat(a[i], b);
               }
 
             System.out.println(count);
-            Q++;
           }
+      }
+
+    static int eat(int a, int[] b)
+      {
+        int s = 0;
+        int e = b.length - 1;
+        int m;
+
+        while (s < e)
+          {
+            m = (s + e) / 2;
+
+            if (a <= b[m])
+              {
+                e = m - 1;
+              } else
+              {
+                s = m + 1;
+              }
+          }
+
+        return a > b[s] ? s + 1 : s;
       }
   }
