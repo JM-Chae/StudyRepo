@@ -5,66 +5,60 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main
+class Main
   {
-    static int[][] a;
-    static boolean[][] check;
+    static int[][] map;
     static int n;
     static int m;
+    static int[] xd = {0, 1, 0, -1};
+    static int[] yd = {1, 0, -1, 0};
 
     public static void main(String[] args) throws IOException
       {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        st = new StringTokenizer(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
 
-        a = new int[n + 1][m + 1];
-        check = new boolean[n + 1][m + 1];
+        map = new int[n][m];
 
-        for (int i = 1; i < n + 1; i++)
+        for (int i = 0; i < n; i++)
           {
-            String line = br.readLine();
-            for (int j = 1; j < m + 1; j++)
+            String temp = br.readLine();
+            for (int j = 0; j < m; j++)
               {
-                a[i][j] = Integer.parseInt(String.valueOf(line.charAt(j - 1)));
-                check[i][j] = false;
+                map[i][j] = temp.charAt(j) - '0';
               }
           }
 
-        BFS(1, 1);
+        BFS(0, 0);
 
-        System.out.println(a[n][m]);
-        br.close();
+        System.out.println(map[n - 1][m - 1]);
       }
 
-    static void BFS(int i, int j)
+    static void BFS(int y, int x)
       {
         Queue<int[]> q = new LinkedList<>();
-        q.add(new int[]{i, j});
-        check[i][j] = true;
-
-        int[] dx = {1, 0, -1, 0};
-        int[] dy = {0, 1, 0, -1};
+        q.add(new int[]{y, x});
 
         while (!q.isEmpty())
           {
-            int[] cur = q.poll();
-            for (int k = 0; k < 4; k++)
-              {
-                int count = a[cur[0]][cur[1]];
-                i = cur[0] + dx[k];
-                j = cur[1] + dy[k];
 
-                if (i > n || j > m)
+            int[] cur = q.poll();
+            int current = map[cur[0]][cur[1]];
+
+            for (int i = 0; i < 4; i++)
+              {
+                int tx = cur[1] + xd[i];
+                int ty = cur[0] + yd[i];
+
+                if (tx >= 0 && tx < m && ty >= 0 && ty < n)
                   {
-                    continue;
-                  } else if (!check[i][j] && !(a[i][j] == 0))
-                  {
-                    a[i][j] = 1 + count;
-                    q.add(new int[]{i, j});
-                    check[i][j] = true;
+                    if (map[ty][tx] == 1)
+                      {
+                        map[ty][tx] = map[ty][tx] + current;
+                        q.add(new int[]{ty, tx});
+                      }
                   }
               }
           }
