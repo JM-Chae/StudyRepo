@@ -5,76 +5,80 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.StringTokenizer;
 
-class Main
-  {
-    static ArrayList<Integer[]> arr = new ArrayList<>();
-    static ArrayList<Integer>[] chizu;
-    static int cost = 0;
-    static int count = 0;
-    static int[] depth;
+class Main {
 
-    public static void main(String[] args) throws IOException
-      {
+    static int n, m, k;
+    static ArrayList<Integer[]> map;
+    static int[] d;
+    static int count;
+    static int total_cost;
+    static int[] position;
+
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
-        int k = Integer.parseInt(st.nextToken());
-        chizu = new ArrayList[n + 1];
-        depth = new int[n + 1];
 
-        for (int i = 1; i <= n; i++)
-          {
-            chizu[i] = new ArrayList<>();
-            chizu[i].add(i);
-            depth[i] = 0;
-          }
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        k = Integer.parseInt(st.nextToken());
+        position = new int[n + 1];
+        map = new ArrayList<>();
+        d = new int[n + 1];
+        count = 0;
+        total_cost = 0;
 
-        for (int i = 1; i <= m; i++)
-          {
+        for (int i = 1; i <= n; i++) {
+            position[i] = i;
+        }
+
+        for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
             int c = Integer.parseInt(st.nextToken());
 
-            arr.add(new Integer[]{a, b, c});
-          }
+            map.add(new Integer[]{a, b, c});
+        }
 
-        arr.sort(Comparator.comparingInt(temp -> temp[2]));
+        map.sort(Comparator.comparingInt(temp -> temp[2]));
 
-        for (int i = 0; i < m; i++)
-          {
-            if (n - count > k) union(i);
-          }
+        for (int i = 0; i < m; i++) {
+            if (n - count <= k) {
+                break;
+            }
 
-        System.out.println(cost);
-      }
+            union(i);
+        }
 
-    static public void union(int i)
-      {
-        int s = arr.get(i)[0];
-        int e = arr.get(i)[1];
-        int c = arr.get(i)[2];
+        System.out.println(total_cost);
+    }
 
-        int a = find(s);
-        int b = find(e);
+    static void union(int a) {
+        int cur = map.get(a)[0];
+        int next = map.get(a)[1];
+        int cost = map.get(a)[2];
 
-        if (a == b) return;
+        int cur_position = find(cur);
+        int next_position = find(next);
 
-        if (depth[a] < depth[b]) chizu[a].set(0, b);
-        else if (depth[a] > depth[b]) chizu[b].set(0, a);
-        else
-          {
-            chizu[a].set(0, b);
-            depth[b]++;
-          }
+        if (cur_position == next_position) {
+            return;
+        }
+
+        if (d[cur_position] > d[next_position]) {
+            position[next_position] = cur_position;
+        } else if (d[cur_position] < d[next_position]) {
+            position[cur_position] = next_position;
+        } else {
+            d[cur_position]++;
+            position[next_position] = cur_position;
+        }
 
         count++;
-        cost = cost + c;
-      }
+        total_cost += cost;
+    }
 
-    static public int find(int road)
-      {
-        return chizu[road].get(0) == road ? road : find(chizu[road].get(0));
-      }
-  }
+    static int find(int a) {
+        return position[a] == a ? a : find(position[a]);
+    }
+}
