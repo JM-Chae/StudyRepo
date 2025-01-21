@@ -6,65 +6,53 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-class Main
-  {
-    static ArrayList<Integer>[] friendMap;
-    static boolean[] visited;
-    static int[] rank;
-    static int count = -1;
+class Main {
 
-    public static void main(String[] args) throws IOException
-      {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
         int m = Integer.parseInt(br.readLine());
-        friendMap = new ArrayList[n + 1];
-        visited = new boolean[n + 1];
-        rank = new int[n + 1];
+        int[] position = new int[n + 1];
+        boolean[] visited = new boolean[n + 1];
+        int callCount = 0;
 
-        for (int i = 0; i <= n; i++)
-          {
-            friendMap[i] = new ArrayList<>();
-            rank[i] = 0;
-          }
+        ArrayList<Integer>[] list = new ArrayList[n + 1];
 
-        for (int i = 1; i <= m; i++)
-          {
+        for (int i = 1; i <= n; i++) {
+            list[i] = new ArrayList<>();
+        }
+
+        for (int i = 0; i < m; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
 
-            friendMap[a].add(b);
-            friendMap[b].add(a);
-          }
+            list[a].add(b);
+            list[b].add(a);
+        }
 
-        counting();
-
-        System.out.println(count);
-      }
-
-    static void counting()
-      {
         Queue<Integer> q = new LinkedList<>();
         q.add(1);
-        while (!q.isEmpty())
-          {
-            int student = q.poll();
+        visited[1] = true;
+        while (!q.isEmpty()) {
+            int cur = q.poll();
+            if (position[cur] > 1) {
+                continue;
+            }
 
-            if (!visited[student] && rank[student] <= 2)
-              {
-                visited[student] = true;
-                count++;
-                for (int i = 0; i < friendMap[student].size(); i++)
-                  {
-                    int friend = friendMap[student].get(i);
-                    if (!visited[friend] && !q.contains(friend))
-                      {
-                            q.add(friend);
-                            rank[friend] = rank[student] + 1;
-                      }
-                  }
-              }
-          }
-      }
-  }
+            if (!list[cur].isEmpty()) {
+                for (int i = 0; i < list[cur].size(); i++) {
+                    int next = list[cur].get(i);
+                    if (!visited[next]) {
+                        visited[next] = true;
+                        position[next] = position[cur] + 1;
+                        q.add(next);
+                        callCount++;
+                    }
+                }
+            }
+        }
+
+        System.out.println(callCount);
+    }
+}
