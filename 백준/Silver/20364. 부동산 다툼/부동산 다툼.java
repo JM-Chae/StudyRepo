@@ -1,13 +1,11 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 class Main {
 
-    static int[] arr;
+
     static int[] sold;
     static int n, q;
     static StringBuffer sb = new StringBuffer();
@@ -18,12 +16,7 @@ class Main {
 
         n = Integer.parseInt(st.nextToken());
         q = Integer.parseInt(st.nextToken());
-        arr = new int[n + 1];
         sold = new int[n + 1];
-
-        for (int i = n; i >= 2; i--) {
-            arr[i] = i / 2;
-        }
 
         for (int i = 1; i <= q; i++) {
             bfs(Integer.parseInt(br.readLine()));
@@ -34,19 +27,17 @@ class Main {
 
     private static void bfs(int q) {
         int ans = 0;
-        Queue<Integer> qq = new LinkedList<>();
-        qq.add(q);
-        while (!qq.isEmpty()) {
-            int cur = qq.poll();
-            if (sold[cur] == 1) {
-                ans = cur;
+        int next = q;
+        while (next != 1) {
+            if (sold[next] == 1) {
+                ans = next;
             }
 
-            if (arr[cur] == 1) {
+            next /= 2;
+
+            if (next == 1) {
                 break;
             }
-
-            qq.add(arr[cur]);
         }
 
         if (ans == 0) {
