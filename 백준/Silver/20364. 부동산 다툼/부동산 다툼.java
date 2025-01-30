@@ -10,6 +10,7 @@ class Main {
     static int[] arr;
     static int[] sold;
     static int n, q;
+    static StringBuffer sb = new StringBuffer();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -25,11 +26,13 @@ class Main {
         }
 
         for (int i = 1; i <= q; i++) {
-            System.out.println(bfs(Integer.parseInt(br.readLine())));
+            bfs(Integer.parseInt(br.readLine()));
         }
+
+        System.out.println(sb);
     }
 
-    private static int bfs(int q) {
+    private static void bfs(int q) {
         int ans = 0;
         Queue<Integer> qq = new LinkedList<>();
         qq.add(q);
@@ -50,6 +53,6 @@ class Main {
             sold[q] = 1;
         }
 
-        return ans;
+        sb.append(ans + "\n");
     }
 }
